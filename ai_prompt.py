@@ -59,7 +59,7 @@ class AIPrompt:
             search_results = self.fetch_serper_results(search_query)
             
             relevant_info = ""
-            if search_results and 'organic' in search_results:
+            if (search_results and 'organic' in search_results):
                 for result in search_results['organic'][:3]:  # Use top 3 results
                     relevant_info += f"\n- {result['title']}: {result['snippet']}"
             
@@ -141,13 +141,40 @@ class AIPrompt:
                 logger.error(traceback.format_exc())
                 raise
 
+    def check_grammar(self, text: str) -> str:
+        """Check the grammar of the provided text using LanguageTool API."""
+        url = "https://api.languagetool.org/v2/check"
+        data = {
+            'text': text,
+            'language': 'en-US'
+        }
+
+        try:
+            response = requests.post(url, data=data)
+            response.raise_for_status()
+            result = response.json()
+
+            if 'matches' in result:
+                corrected_text = text
+                for match in result['matches']:
+                    if 'replacements' in match and match['replacements']:
+                        replacement = match['replacements'][0]['value']
+                        offset = match['offset']
+                        length = match['length']
+                        corrected_text = (corrected_text[:offset] + replacement + corrected_text[offset + length:])
+                return corrected_text
+            return text
+        except requests.RequestException as e:
+            logger.error(f"Grammar check request failed: {str(e)}")
+            return text
+
     def process_request(self, content: str, approach: str, purpose: str, category: str, 
                         additional_params: Optional[Dict[str, Any]] = None) -> str:
         try:
             prompt = self.generate_prompt(content, approach, purpose, category, additional_params)
             response = self.get_ai_response(prompt)
-            return response
+            checked_response = self.check_grammar(response)
+            return checked_response
         except Exception as e:
             logger.error(f"Error in processing request: {str(e)}")
             raise
-
