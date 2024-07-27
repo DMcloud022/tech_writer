@@ -81,7 +81,7 @@ class UserInterface:
         purpose_frame = ttk.Frame(options_frame)
         purpose_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 10))
         ttk.Label(purpose_frame, text="Purpose:", font=self.body_font).pack(anchor=tk.W)
-        self.purpose_var = tk.StringVar(value="Instructional")
+        self.purpose_var = tk.StringVar(value="General")
         purpose_combobox = ttk.Combobox(purpose_frame, textvariable=self.purpose_var, 
                                         values=["Instructional", "Informative", "Descriptive", "Persuasive", "Analytical", "Evaluative", "Creative"])
         purpose_combobox.pack(fill=tk.X, pady=(5, 0))
@@ -90,7 +90,7 @@ class UserInterface:
         category_frame = ttk.Frame(options_frame)
         category_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
         ttk.Label(category_frame, text="Category:", font=self.body_font).pack(anchor=tk.W)
-        self.category_var = tk.StringVar(value="User Manual")
+        self.category_var = tk.StringVar(value="General")
         category_combobox = ttk.Combobox(category_frame, textvariable=self.category_var, 
                                          values=["User Manual", "Technical Specification", "Report", "Analysis", "Whitepaper", "Instructional Video Script", "API Documentation", "Technical Blog Post", "Case Study"])
         category_combobox.pack(fill=tk.X, pady=(5, 0))

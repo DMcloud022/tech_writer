@@ -1,8 +1,10 @@
 import os
 import logging
 import traceback
+import json
 from groq import Groq
 from typing import Dict, Any, Optional
+import requests
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -11,10 +13,13 @@ logger = logging.getLogger(__name__)
 class AIPrompt:
     def __init__(self):
         try:
-            api_key = os.getenv("GROQ_API_KEY")
-            if not api_key:
+            self.groq_api_key = os.getenv("GROQ_API_KEY")
+            self.serper_api_key = os.getenv("SERPER_API_KEY")
+            if not self.groq_api_key:
                 raise ValueError("GROQ_API_KEY environment variable is not set.")
-            self.client = Groq(api_key=api_key)
+            if not self.serper_api_key:
+                raise ValueError("SERPER_API_KEY environment variable is not set.")
+            self.client = Groq(api_key=self.groq_api_key)
             logger.info("Groq client initialized successfully.")
         except Exception as e:
             logger.error(f"Failed to initialize Groq client: {str(e)}")
@@ -24,6 +29,23 @@ class AIPrompt:
         """Sanitize and truncate input text."""
         return ' '.join(text.strip().split())[:max_length]
 
+    def fetch_serper_results(self, query: str) -> Dict[str, Any]:
+        """Fetch search results using Serper API."""
+        url = "https://google.serper.dev/search"
+        headers = {
+            "X-API-KEY": self.serper_api_key,
+            "Content-Type": "application/json"
+        }
+        data = json.dumps({"q": query})
+
+        try:
+            response = requests.post(url, headers=headers, data=data)
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as e:
+            logger.error(f"Serper API request failed: {str(e)}")
+            return {}
+
     def generate_prompt(self, content: str, approach: str, purpose: str, category: str, 
                         additional_params: Optional[Dict[str, Any]] = None) -> str:
         try:
@@ -32,6 +54,15 @@ class AIPrompt:
             sanitized_purpose = self.sanitize_input(purpose)
             sanitized_category = self.sanitize_input(category)
             
+            # Fetch relevant search results
+            search_query = f"{sanitized_category} {sanitized_purpose}"
+            search_results = self.fetch_serper_results(search_query)
+            
+            relevant_info = ""
+            if search_results and 'organic' in search_results:
+                for result in search_results['organic'][:3]:  # Use top 3 results
+                    relevant_info += f"\n- {result['title']}: {result['snippet']}"
+            
             prompt = f"""
             As a senior technical writer and content creator, generate a professional, standards-compliant report based on the following parameters:
 
@@ -39,6 +70,9 @@ class AIPrompt:
             Approach: {sanitized_approach}
             Purpose: {sanitized_purpose}
             Category: {sanitized_category}
+
+            Relevant information from recent search results:
+            {relevant_info}
 
             Adhere to relevant international standards including but not limited to:
             - ISO/IEC 26514 for systems and software engineering documentation
@@ -59,7 +93,7 @@ class AIPrompt:
 
             Create a comprehensive and well-structured report with complete details tailored for a Senior Technical Writer.
 
-            Include the following content based on the category:
+            Include the following content based on the category including but not limited to:
             - Medical Reports: Patient data privacy considerations and regulatory compliance (e.g., HIPAA).
             - Business Reports: Financial analysis, market research, and strategic recommendations.
             - Technical Reports: Detailed methodologies, technical specifications, and performance data.
@@ -70,7 +104,7 @@ class AIPrompt:
             - Maintain consistent terminology throughout the document
             - Use active voice and present tense where appropriate
             - Define all acronyms at first use
-            - Suggest appropriate places for visualizations (charts, diagrams, etc.)
+            - Add accurate sources with references and citation if possible.
 
             Focus on accuracy, clarity, and professionalism in the content.
             """
@@ -116,3 +150,4 @@ class AIPrompt:
         except Exception as e:
             logger.error(f"Error in processing request: {str(e)}")
             raise
+
