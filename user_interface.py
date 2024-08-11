@@ -74,7 +74,7 @@ class UserInterface:
         ttk.Label(approach_frame, text="Approach:", font=self.body_font).pack(anchor=tk.W)
         self.approach_var = tk.StringVar(value="Technical")
         approach_combobox = ttk.Combobox(approach_frame, textvariable=self.approach_var, 
-                                         values=["Technical", "Non-Technical", "Conversational", "Formal", "Objective", "Subjective", "Collaborative"])
+                                         values=["Technical Documentation", "User-Centric Approach", "Iterative Documentation", "Inclusive Collaboration", "Concise Expression", "Insight-Driven Content", "Regulatory Compliance","Adaptive Documentation","Data Protection Focus","Universal Design"])
         approach_combobox.pack(fill=tk.X, pady=(5, 0))
 
         # Purpose
@@ -83,7 +83,7 @@ class UserInterface:
         ttk.Label(purpose_frame, text="Purpose:", font=self.body_font).pack(anchor=tk.W)
         self.purpose_var = tk.StringVar(value="General")
         purpose_combobox = ttk.Combobox(purpose_frame, textvariable=self.purpose_var, 
-                                        values=["Instructional", "Informative", "Descriptive", "Persuasive", "Analytical", "Evaluative", "Creative"])
+                                        values=["End-to-End Product Documentation","System Architecture Specifications", "Release Notes", "User Assistance Resources", "New User Guides", "Regulatory Compliance Reports", "Educational Training Kits", "Operational Guidelines", "Promotional Materials", "Project Documentation"])
         purpose_combobox.pack(fill=tk.X, pady=(5, 0))
 
         # Category
@@ -92,7 +92,7 @@ class UserInterface:
         ttk.Label(category_frame, text="Category:", font=self.body_font).pack(anchor=tk.W)
         self.category_var = tk.StringVar(value="General")
         category_combobox = ttk.Combobox(category_frame, textvariable=self.category_var, 
-                                         values=["User Manual", "Technical Specification", "Report", "Analysis", "Whitepaper", "Instructional Video Script", "API Documentation", "Technical Blog Post", "Case Study"])
+                                         values=["Project Management","Business Analysis", "Software Development", "Quality Assurance", "Technical Support", "User Experience (UX)", "Regulatory Compliance", "Customer and Clients", "Marketing and Sales", "Internal Procedures"])
         category_combobox.pack(fill=tk.X, pady=(5, 0))
 
         # Content

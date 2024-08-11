@@ -41,7 +41,7 @@ class TechnicalWritingAssistant:
 
     async def run(self):
         try:
-            await self.ui.run()
+            self.ui.run()
         except Exception as e:
             logger.error(f"An unexpected error occurred: {str(e)}")
             logger.error(traceback.format_exc())

@@ -64,49 +64,28 @@ class AIPrompt:
                     relevant_info += f"\n- {result['title']}: {result['snippet']}"
             
             prompt = f"""
-            As a senior technical writer and content creator, generate a professional, standards-compliant report based on the following parameters:
 
-            Content: {sanitized_content}
-            Approach: {sanitized_approach}
-            Purpose: {sanitized_purpose}
-            Category: {sanitized_category}
+            As a senior technical writer and business analyst, please create a professional and standards-compliant technical report based on the provided text {sanitized_content}.
 
-            Relevant information from recent search results:
-            {relevant_info}
+            Writing Approach: Incorporate the specified writing approach {sanitized_approach} to ensure consistency and clarity throughout the report.
+            Purpose: The report's purpose is {sanitized_purpose} and it is intended for an audience related to {sanitized_category}.
+            Standards and Format: Adhere to industry standards for technical writing, including typical report formats and structures. 
+            Use clear, concise language, and ensure the report is error-free, easy to understand, and visually appealing.
+            Additionally, provide a detailed analysis of the relevant information from recent search results, {relevant_info}. 
+            Summarize the key points and extract the most critical details from these results, ensuring that the summary is both concise and accurate.
 
-            Adhere to relevant international standards including but not limited to:
-            - ISO/IEC 26514 for systems and software engineering documentation
-            - ISO/IEC/IEEE 15288 for systems engineering processes
-            - DITA (Darwin Information Typing Architecture) for technical content
-            - ISO 9001:2015 for quality management systems documentation
-            - IEEE 1063 for software user documentation
-            - ISO/IEC 25062 for usability reports
-            - The Chicago Manual of Style for editorial practice
+            Create a professional, standards-compliant report incorporating the following expert approaches and best practices:
 
-            Apply these expert approaches and best practices:
-            1. Contextual Analysis: Thoroughly understand the background, audience, and objectives.
-            2. Clear and Concise Language: Use precise language to ensure clarity.
-            3. Structured Content: Organize information logically and hierarchically.
-            4. Visual Aids: Integrate charts, diagrams, and tables where applicable.
-            5. Revision and Proofreading: Ensure the document is free of errors and inconsistencies.
-            6. Accessibility: Make the content accessible to all users, including those with disabilities.
-
-            Create a comprehensive and well-structured report with complete details tailored for a Senior Technical Writer.
-
-            Include the following content based on the category including but not limited to:
-            - Medical Reports: Patient data privacy considerations and regulatory compliance (e.g., HIPAA).
-            - Business Reports: Financial analysis, market research, and strategic recommendations.
-            - Technical Reports: Detailed methodologies, technical specifications, and performance data.
-            - Environmental Reports: Impact assessments, sustainability considerations, and regulatory compliance.
-
-            Formatting Guidelines:
-            - Use clear, professional language appropriate for the target audience
-            - Maintain consistent terminology throughout the document
-            - Use active voice and present tense where appropriate
-            - Define all acronyms at first use
-            - Add accurate sources with references and citation if possible.
-
-            Focus on accuracy, clarity, and professionalism in the content.
+            Contextual Analysis: Thoroughly analyze the background, audience, objectives, and relevant industry standards to ensure the report is well-informed and relevant.
+            Clear and Concise Language: Use precise and straightforward language to enhance readability and ensure the report is easily understood.
+            Logical Organization: Structure the content logically and hierarchically, following a clear and systematic approach to content presentation.
+            Step-by-Step Guidance: Include step-by-step instructions or improvements as necessary to clarify complex points and facilitate understanding.
+            Compliance and Standards: Adhere to all legal, ethical, and regulatory requirements, and ensure the report complies with relevant international standards and practices.
+            Thorough Revision: Conduct comprehensive revisions and proofreading to eliminate errors, inconsistencies, and ensure high-quality content.
+            Accessibility: Design the report to be accessible to all users, including those with disabilities, by following WCAG (Web Content Accessibility Guidelines) standards.
+            User-Centric Focus: Tailor the content to address the specific needs and expectations of the target audience, ensuring it is relevant and engaging.
+            
+            Ensure that the final report is polished, professional, and meets the highest standards of technical writing.
             """
 
             if additional_params:
